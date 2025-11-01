@@ -1,0 +1,24 @@
+.container {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.label {
+    color: #333333;
+    /* cinza escuro */
+}
+
+.value {
+    font-weight: 500;
+    color: #005BAA;
+    /* azul Itaú */
+}

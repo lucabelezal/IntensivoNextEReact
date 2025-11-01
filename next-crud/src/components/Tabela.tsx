@@ -6,7 +6,7 @@ interface TabelaProps {
     clienteExcluido?: (cliente: Cliente) => void;
 }
 
-export default function Tabela(props: TabelaProps) {
+function Tabela(props: TabelaProps) {
 
     function renderizarCabecalho() {
         return (
@@ -45,3 +45,5 @@ export default function Tabela(props: TabelaProps) {
         </table>
     )
 }
+
+export default Tabela;

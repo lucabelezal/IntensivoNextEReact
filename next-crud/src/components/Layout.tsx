@@ -5,7 +5,7 @@ interface LayoutProps {
     children: any
 }
 
-export default function Layout(props: LayoutProps) {
+function Layout(props: LayoutProps) {
     return (
         <div className={`
             flex flex-col w-2/3
@@ -18,3 +18,5 @@ export default function Layout(props: LayoutProps) {
         </div>
     )
 }
+
+export default Layout;
