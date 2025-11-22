@@ -1,76 +1,123 @@
-// import Layout from "@/components/Layout";
-// import Tabela from "@/components/Tabela";
-// import Cliente from "@/core/Cliente";
+/**
+ * Home Page - Refatorada
+ * 
+ * Demonstra uso de:
+ * - Context API global (Toast)
+ * - useReducer (useCardLimit)
+ * - Compound Components (LimitInfo)
+ * - Memoization
+ * - Separação de responsabilidades
+ */
 
-// export default function Home() {
+import { useCallback } from 'react';
+import { useCardLimit } from '@/hooks/useCardLimit';
+import { useToast } from '@/contexts/ToastContext';
+import { CardLimitInput } from '@/components/CardLimitInput';
+import { LimitInfo } from '@/components/LimitInfo';
+import { ActionButtons } from '@/components/ActionButtons';
+import { formatMoney } from '@/lib/utils/formatters';
 
-//     const clientes = [
-//         new Cliente('Ana', 3456, '1'),
-//         new Cliente('Maria', 1234, '2'),
-//         new Cliente('João', 5678, '3'),
-//     ]
+export default function Home() {
+    // ============================================
+    // HOOKS - Estado e lógica de negócio
+    // ============================================
 
-//     return (
-//         <div className={'flex items-center justify-center h-screen'}>
-//             <Layout titulo="Bem-vindo à página inicial">
-//                 <Tabela clientes={clientes} />
-//             </Layout>
-//         </div>
-//     );
-// }
+    const {
+        limit,
+        inputValue,
+        numericValue,
+        validationError,
+        canSave,
+        setInputValue,
+        reset,
+        commitChange,
+    } = useCardLimit({
+        initialUsedAmount: 4000,
+        maxLimit: 50000,
+    });
 
+    const toast = useToast();
 
-import useLimitForm from '@/hooks/useLimitForm';
-import CardLimitInput from "../components/CardLimitInput";
-import LimitInfo from "../components/LimitInfo";
-import ActionButtons from "../components/ActionButtons";
-import { Toast } from '@/components/Toast';
-import { useToast } from '@/hooks/useToast';
+    // ============================================
+    // HANDLERS - Estáveis com useCallback
+    // ============================================
 
-// A lógica de parsing/validação do input foi movida para o hook useLimitForm
+    const handleSave = useCallback(() => {
+        if (!canSave) return;
 
-function Home() {
-    const totalLimit = 10000;
-    const usedLimit = 4000;
-    // usar hook para encapsular state e validação
-    const { newLimit, setNewLimit, numericLimit, canSave, validationMessage } = useLimitForm(usedLimit);
+        // Aqui faria a chamada para API
+        // const result = await cardLimitService.updateLimit(numericValue);
 
-    const { toast, hideToast, success } = useToast();
+        // Simulando sucesso
+        commitChange(numericValue);
 
-    const handleSave = () => {
-        // aqui você pode chamar a API para salvar; após sucesso mostramos o toast
-        success(`Novo limite: R$ ${numericLimit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`);
-    };
-    const handleCancel = () => alert("Cancelado");
+        toast.success(
+            `Limite atualizado para ${formatMoney(numericValue)}!`,
+            'top'
+        );
+    }, [canSave, numericValue, commitChange, toast]);
+
+    const handleCancel = useCallback(() => {
+        reset();
+        toast.info('Alteração cancelada', 'top');
+    }, [reset, toast]);
+
+    // ============================================
+    // RENDER
+    // ============================================
 
     return (
-        <div className="min-h-screen flex flex-col justify-between p-4 bg-[#F5F5F5]">
-            <div className="flex flex-col gap-4">
-                <h1 className="text-xl font-bold text-[#005BAA]">Aumentar Limite do Cartão</h1>
-                <p className="text-[#333333]">
-                    Defina um novo limite disponível para o seu cartão. O valor deve respeitar as regras de uso.
+        <div className="min-h-screen flex flex-col bg-white">
+            {/* Header com estilo iOS */}
+            <div className="bg-white border-b border-gray-200 px-4 py-6 shadow-sm">
+                <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
+                    Aumentar Limite
+                </h1>
+                <p className="text-sm text-gray-600 mt-1">
+                    Defina um novo limite para seu cartão
                 </p>
-
-                <CardLimitInput value={newLimit} onChange={setNewLimit} />
-
-                {validationMessage ? (
-                    <p className="text-sm text-red-600 mt-2">{validationMessage}</p>
-                ) : null}
-
-                <LimitInfo total={totalLimit} used={usedLimit} />
             </div>
 
-            <ActionButtons onCancel={handleCancel} onSave={handleSave} canSave={canSave} />
-            <Toast
-                message={toast.message}
-                type={toast.type}
-                isVisible={toast.isVisible}
-                onClose={hideToast}
-                duration={4000}
-                position="top"
+            {/* Content */}
+            <div className="flex-1 flex flex-col p-4 gap-4 pb-32 bg-gradient-to-b from-gray-50 to-white">
+                {/* Card do Input - estilo iOS */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+                    <label className="block text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
+                        Novo Limite
+                    </label>
+                    <CardLimitInput
+                        value={inputValue}
+                        onChange={setInputValue}
+                        error={validationError}
+                    />
+                </div>
+
+                {/* Card de Informações - estilo iOS */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <LimitInfo total={limit.currentLimit} used={limit.usedAmount}>
+                        <LimitInfo.Row label="Limite Total" type="total" />
+                        <LimitInfo.Row label="Em Uso" type="used" />
+                        <LimitInfo.Row label="Disponível" type="available" highlighted />
+                    </LimitInfo>
+                </div>
+
+                {/* Dica visual - estilo iOS */}
+                {canSave && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-start gap-2">
+                        <span className="text-blue-600 text-lg">💡</span>
+                        <p className="text-xs text-blue-900 flex-1">
+                            Novo limite: <strong>{formatMoney(numericValue)}</strong>
+                        </p>
+                    </div>
+                )}
+            </div>
+
+            {/* Action Buttons - Fixos no bottom com safe area */}
+            <ActionButtons
+                onCancel={handleCancel}
+                onSave={handleSave}
+                canSave={canSave}
             />
         </div>
     );
 }
-
-export default Home;

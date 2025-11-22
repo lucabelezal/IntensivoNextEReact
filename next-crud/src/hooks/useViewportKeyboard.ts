@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 
 export interface UseViewportKeyboardOptions {
-    extraPadding?: number;
     closedOffset?: number;
     listenFocus?: boolean;
     listenOrientation?: boolean;
@@ -22,7 +21,6 @@ export default function useViewportKeyboard(
     options: UseViewportKeyboardOptions = {}
 ): UseViewportKeyboardResult {
     const {
-        extraPadding = 0,
         closedOffset = 0,
         listenFocus = true,
         listenOrientation = true,
@@ -47,7 +45,7 @@ export default function useViewportKeyboard(
             const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
             const windowHeight = window.innerHeight;
             const keyboardHeight = Math.max(0, windowHeight - viewportHeight);
-            const newOffset = keyboardHeight > 0 ? keyboardHeight + extraPadding : closedOffset;
+            const newOffset = keyboardHeight > 0 ? keyboardHeight : closedOffset;
 
             if (debug) {
                 console.debug('[useViewportKeyboard] updateOffset', {
@@ -57,9 +55,7 @@ export default function useViewportKeyboard(
                     newOffset,
                     timestamp: Date.now(),
                 });
-            }
-
-            if (keyboardHeight === 0) {
+            } if (keyboardHeight === 0) {
                 // ao fechar: aplicar imediatamente para evitar descida atrasada
                 setBottomOffset(newOffset);
             } else if (typeof window !== 'undefined' && window.requestAnimationFrame) {
@@ -93,7 +89,7 @@ export default function useViewportKeyboard(
                 const visualDiff = Math.max(0, windowHeight - (window.visualViewport?.height ?? windowHeight));
 
                 const immediateKeyboardHeight = visualDiff > 0 ? visualDiff : estimateKeyboardHeight();
-                const immediateOffset = immediateKeyboardHeight + extraPadding;
+                const immediateOffset = immediateKeyboardHeight;
 
                 if (debug) {
                     console.debug('[useViewportKeyboard] focusin heuristic', {
@@ -160,7 +156,7 @@ export default function useViewportKeyboard(
             }
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
         };
-    }, [extraPadding, closedOffset, listenFocus, listenOrientation, debug]);
+    }, [closedOffset, listenFocus, listenOrientation, debug]);
 
     return { bottomOffset, isKeyboardOpen };
 }

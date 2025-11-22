@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build
+.next/
+out/
+build/
+dist/
+
+# Misc
+*.md
+*.log
+.git/

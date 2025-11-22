@@ -7,7 +7,6 @@ export interface FixedAboveKeyboardProps {
     className?: string;
     style?: CSSProperties;
     bottom?: number; // deslocamento base (em px) quando o teclado está fechado
-    extraPadding?: number; // padding extra a ser adicionado quando o teclado abrir (encaminhado ao hook)
     animateOnOpen?: boolean;
     openDuration?: number; // duração em ms para abertura (quando o teclado aparece)
     closeDuration?: number; // duração em ms para fechamento (quando o teclado desaparece)
@@ -18,7 +17,6 @@ function FixedAboveKeyboard({
     className,
     style,
     bottom = 16,
-    extraPadding = 16,
     animateOnOpen = true,
     openDuration = 300,
     closeDuration = 300,
@@ -26,7 +24,7 @@ function FixedAboveKeyboard({
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 
-    const { bottomOffset, isKeyboardOpen } = useViewportKeyboard({ extraPadding, closedOffset: 0 });
+    const { bottomOffset, isKeyboardOpen } = useViewportKeyboard({ closedOffset: 0 });
 
     // Quando o teclado abre, deslocamos todo o wrapper fixo para cima por bottomOffset px.
     // O elemento está ancorado com `bottom: bottom`, então quando o teclado está fechado ele fica nessa distância.
