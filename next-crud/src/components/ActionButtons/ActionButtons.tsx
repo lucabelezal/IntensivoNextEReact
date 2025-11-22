@@ -53,7 +53,6 @@ export const ActionButtons = memo(function ActionButtons({
     const buttonNode = (
         <FixedAboveKeyboard
             bottom={0}
-            extraPadding={0}
             animateOnOpen
             openDuration={480}
             closeDuration={480}

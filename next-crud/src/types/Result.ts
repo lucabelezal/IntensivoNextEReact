@@ -28,7 +28,7 @@ export const Result = {
         if (result.success) {
             return Result.ok(fn(result.data));
         }
-        return result;
+        return result as Result<U, E>;
     },
 
     /**
@@ -38,6 +38,7 @@ export const Result = {
         if (result.success) {
             return result.data;
         }
-        throw result.error;
+        const errorResult = result as { success: false; error: E };
+        throw new Error(String(errorResult.error));
     },
 };

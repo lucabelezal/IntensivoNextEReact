@@ -2,12 +2,8 @@
 const nextConfig = {
     reactStrictMode: true,
 
-    // Otimizações de performance
-    swcMinify: true,
+    // Compressão HTTP
     compress: true,
-
-    // Otimiza fontes automaticamente
-    optimizeFonts: true,
 
     // Remove código não usado em produção
     compiler: {
