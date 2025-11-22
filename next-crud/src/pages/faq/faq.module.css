@@ -1,0 +1,68 @@
+.page {
+    min-height: 100vh;
+    padding: 16px 16px 32px;
+    max-width: 720px;
+    margin: 0 auto;
+    background: #F9FAFB;
+}
+
+.header {
+    margin-bottom: 24px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 8px 0;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #6B7280;
+    margin: 0;
+}
+
+.search {
+    margin-bottom: 20px;
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.categoryChip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.categoryChip:hover {
+    border-color: #3B82F6;
+}
+
+.categoryChip.active {
+    font-weight: 600;
+}
+
+.count {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 0 0 16px 0;
+}
+
+.content {
+    margin-bottom: 24px;
+}

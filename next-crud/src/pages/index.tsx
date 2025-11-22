@@ -10,6 +10,8 @@
  */
 
 import { useCallback } from 'react';
+import Link from 'next/link';
+import { MdHelpOutline } from 'react-icons/md';
 import { useCardLimit } from '@/hooks/useCardLimit';
 import { useToast } from '@/contexts/ToastContext';
 import { CardLimitInput } from '@/components/CardLimitInput';
@@ -69,17 +71,30 @@ export default function Home() {
     return (
         <div className="min-h-screen flex flex-col bg-white">
             {/* Header com estilo iOS */}
-            <div className="bg-white border-b border-gray-200 px-4 py-6 shadow-sm">
-                <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
-                    Aumentar Limite
-                </h1>
-                <p className="text-sm text-gray-600 mt-1">
-                    Defina um novo limite para seu cartão
-                </p>
+            <div className="bg-white border-b border-gray-200 px-4 py-6 shadow-sm relative">
+                <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                        <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
+                            Aumentar Limite
+                        </h1>
+                        <p className="text-sm text-gray-600 mt-1">
+                            Defina um novo limite para seu cartão
+                        </p>
+                    </div>
+
+                    {/* Botão FAQ */}
+                    <Link
+                        href="/faq"
+                        className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 active:scale-95 transition-all duration-200 shadow-sm"
+                        aria-label="Acessar FAQs"
+                    >
+                        <MdHelpOutline className="w-6 h-6 text-white" />
+                    </Link>
+                </div>
             </div>
 
             {/* Content */}
-            <div className="flex-1 flex flex-col p-4 gap-4 pb-32 bg-gradient-to-b from-gray-50 to-white">
+            <div className="flex-1 flex flex-col p-4 gap-4 pb-8 bg-gradient-to-b from-gray-50 to-white">
                 {/* Card do Input - estilo iOS */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
                     <label className="block text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
